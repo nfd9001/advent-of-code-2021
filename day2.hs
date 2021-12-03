@@ -8,6 +8,7 @@ import qualified Text.Megaparsec.Char.Lexer as L
 import Data.Void
 import Control.Monad
 import Text.Megaparsec.Error
+import Advent
 
 -- ===========================================================================
 -- Data
@@ -17,22 +18,11 @@ type Parser = Parsec Void String
 
 data Command = Up Integer | Down Integer | Forward Integer deriving (Eq, Show)
 
-sc :: Parser ()
-sc = L.space space1 empty empty 
-lexeme :: Parser a -> Parser a
-lexeme = L.lexeme sc
-number = L.signed sc L.decimal
-
 parseHeading   = lexeme $ (string "forward" $> Forward) <|> 
                  (string "up" $> Up) <|> 
                  (string "down" $> Down) 
 
 parseCommand = parseHeading <*> number <* eof
-                 
-toCommand = runParser parseCommand ""
-
-getErrs ls = Either.fromLeft undefined . toCommand <$> ls
-getCommands ls = Either.fromRight undefined . toCommand <$> ls
 
 -- ===========================================================================
 -- Logic
@@ -51,9 +41,7 @@ runCommand2 (h,d,a) (Forward x) = (h + x, d + (x * a), a)
 main = do
     f <- readFile "inputs/day2.txt"
     let ls = lines f
-    let commands = getCommands ls
-    --sequence $ print . errorBundlePretty <$> getErrs ls 
-    --sequence $ print <$> commands
+    let commands = getParsed parseCommand ls
     print $ uncurry (*) $ foldl' runCommand (0,0) commands
     print $ (\(a,b,_) -> a * b) $ foldl' runCommand2 (0,0,0) commands
 

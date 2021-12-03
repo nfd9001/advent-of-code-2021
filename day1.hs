@@ -1,4 +1,4 @@
-pairs l = zip l $ tail l
+import Advent
 getWindows (x:y:z:xs) = (x + y + z):getWindows (y:z:xs)
 getWindows _ = []
 
