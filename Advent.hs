@@ -1,6 +1,6 @@
 module Advent (Parser, sc, lexeme, number, runParser',
                 getErrs, getParsed, pairs, showParsed,
-                showErrs) where
+                showErrs, threadThroughEndos) where
 
 import Data.List
 import Data.Functor
@@ -41,3 +41,6 @@ showErrs p ls  = sequence $ print <$> getErrs p ls
 
 pairs l = zip l $ tail l
 
+threadThroughEndos :: Foldable t => t (b -> b) -> b -> b
+threadThroughEndos = foldr (flip (.)) id
+ 
