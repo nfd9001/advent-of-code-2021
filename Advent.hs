@@ -1,5 +1,6 @@
 module Advent (Parser, sc, lexeme, number, runParser',
-                getErrs, getParsed, pairs) where
+                getErrs, getParsed, pairs, showParsed,
+                showErrs) where
 
 import Data.List
 import Data.Functor
@@ -27,13 +28,16 @@ arbString = lexeme $ manyTill anySingle spaceChar
 
 execParser p = runParser p ""
 
-getErrs p ls   = print . errorBundlePretty .
+getErrs p ls   = errorBundlePretty .
                   Either.fromLeft undefined  . execParser p <$> ls
 
+getParsed :: Show a => Parser a -> [String] -> [a]
 getParsed p ls =  Either.fromRight undefined . execParser p <$> ls
 
+showParsed :: Show a => Parser a -> [String] -> IO [()]
 showParsed p ls = sequence $ print <$> getParsed p ls
-showErrs   p ls = sequence $ getErrs p ls
+showErrs   :: Parser a -> [String] -> IO [()]
+showErrs p ls  = sequence $ print <$> getErrs p ls
 
 pairs l = zip l $ tail l
 
