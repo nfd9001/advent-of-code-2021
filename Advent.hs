@@ -6,7 +6,7 @@ import Data.List
 import Data.Functor
 import Control.Applicative
 import qualified Data.Either as Either
-import Text.Megaparsec
+import Text.Megaparsec hiding (some)
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 import Data.Void
@@ -16,7 +16,9 @@ import Text.Megaparsec.Error
 type Parser = Parsec Void String
 
 sc :: Parser ()
-sc = L.space space1 empty empty 
+sc  = L.space (void $ some (char ' ' <|> char '\t')) empty empty 
+scn :: Parser ()
+scn = L.space space1 empty empty 
 
 lexeme :: Parser a -> Parser a
 lexeme = L.lexeme sc
@@ -37,7 +39,7 @@ getParsed p ls =  Either.fromRight undefined . execParser p <$> ls
 showParsed :: Show a => Parser a -> [String] -> IO [()]
 showParsed p ls = sequence $ print <$> getParsed p ls
 showErrs   :: Parser a -> [String] -> IO [()]
-showErrs p ls  = sequence $ print <$> getErrs p ls
+showErrs p ls  = sequence $ putStrLn <$> getErrs p ls
 
 pairs l = zip l $ tail l
 
