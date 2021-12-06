@@ -14,7 +14,7 @@ import Data.Maybe
 import Advent
 
 -------------------------------------------------------------------------------
---Data
+-- Data
 -------------------------------------------------------------------------------
 type Called = [Integer]
 type Card   = [[(Integer, Bool)]]
@@ -34,6 +34,7 @@ parseInput = do
     pure (called, cards)
 
 -------------------------------------------------------------------------------
+-- Logic
 -------------------------------------------------------------------------------
 
 callNumber :: Integer -> Card -> Card
@@ -67,11 +68,10 @@ getAns2 (n:ns) cards = let
        else getAns2 ns notwon
 
 -------------------------------------------------------------------------------
---Go
+-- Go
 -------------------------------------------------------------------------------
 main = do
     f <- readFile "inputs/day4.txt"
-    --TODO: change Parser to parse Chars instead of Strings
     let [(called, cards)] = getParsed parseInput [f]
     print $ getAns  called cards
     print $ getAns2 called cards
