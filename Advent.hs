@@ -1,7 +1,7 @@
 module Advent (Parser, sc, lexeme, number, eolf, arbString,
                 runParser', getErrs, getParsed, showParsed,
                 showErrs, pairs, threadThroughEndos,
-                groupWithLength) where
+                groupWithLength, compose, times) where
 
 import Data.List
 import Data.Functor
@@ -47,8 +47,20 @@ showErrs p ls  = sequence $ putStrLn <$> getErrs p ls
 
 pairs l = zip l $ tail l
 
+--TODO: rename "flippedCompose"
 threadThroughEndos :: Foldable t => t (b -> b) -> b -> b
 threadThroughEndos = foldr (flip (.)) id
  
+compose :: Foldable t => t (b -> b) -> b -> b
+compose = foldr (.) id
+
+--means "cardinality" when xs sorted
 groupWithLength xs = (\x -> (head x, length x)) <$> group xs
+
+-- via glguy:
+-- https://github.com/glguy/advent2020/blob/ed247131684efa699bd34b846b5d939e9db749fc/common/Advent.hs#L134
+times :: Int -> (a -> a) -> a -> a
+times n f x
+  | n <= 0    = x
+  | otherwise = times (n-1) f $! f x
 
