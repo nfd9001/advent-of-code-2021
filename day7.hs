@@ -46,4 +46,4 @@ main = do
         pos <- range
         pure $ sum $ cost2 pos <$> crabs
     print $ minimum costs
-    pure ()
+

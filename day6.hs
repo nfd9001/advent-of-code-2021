@@ -19,10 +19,10 @@ import qualified Data.IntMap as IM
 parseFish :: Parser [Int]
 parseFish =  (fromIntegral <$> number) `sepBy` char ',' <* eolf
 
--- Go
 initFish :: [Int] -> IntMap Int
 initFish fish =  IM.fromDistinctAscList $ groupWithLength $ sort fish
 
+-- Logic
 doEpoch :: IntMap Int -> IntMap Int
 doEpoch fish = let
     l = IM.toList fish
@@ -34,7 +34,7 @@ doEpoch fish = let
     addNewGen _ map = map
     in addNewGen zero almostfish
 
--- Logic
+-- Go
 main = do
     f <- readFile "inputs/day6.txt"
     let [fish] = getParsed parseFish [f]
