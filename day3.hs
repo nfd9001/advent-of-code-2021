@@ -51,7 +51,7 @@ main = do
     -- pt. 2
     let oxfilter =  (reduceRows $ findBit (<=)) <$> [0..wid - 1]
     let co2filter = (reduceRows $ findBit (>))  <$> [0..wid - 1]
-    let oxrating = head $ oxfilter `threadThroughEndos` rows
-    let co2rating = head $ co2filter `threadThroughEndos` rows
+    let oxrating = head $ oxfilter `composeReverse` rows
+    let co2rating = head $ co2filter `composeReverse` rows
     print $ (intify oxrating) * (intify co2rating)
 

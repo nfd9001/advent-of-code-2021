@@ -1,6 +1,6 @@
 module Advent (Parser, sc, lexeme, number, eolf, arbString,
                 runParser', getErrs, getParsed, showParsed,
-                showErrs, pairs, threadThroughEndos,
+                showErrs, pairs, composeReverse,
                 groupWithLength, compose, times) where
 
 import Data.List
@@ -47,9 +47,8 @@ showErrs p ls  = sequence $ putStrLn <$> getErrs p ls
 
 pairs l = zip l $ tail l
 
---TODO: rename "flippedCompose"
-threadThroughEndos :: Foldable t => t (b -> b) -> b -> b
-threadThroughEndos = foldr (flip (.)) id
+composeReverse :: Foldable t => t (b -> b) -> b -> b
+composeReverse = foldr (flip (.)) id
  
 compose :: Foldable t => t (b -> b) -> b -> b
 compose = foldr (.) id
